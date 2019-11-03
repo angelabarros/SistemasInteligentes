@@ -38,6 +38,9 @@ public class Incendiário extends Agent {
 			int posX = rand.nextInt(100);
 			int posY = rand.nextInt(100);
 			
+			fogo_posicao_x = posX;
+			fogo_posicao_y = posY;
+			
 			//enviar ao quartel a posição do fogo
 			AID receiver = new AID();
 			receiver.setLocalName("Quartel");
