@@ -26,7 +26,7 @@ public class Agente_Participativo extends Agent {
 	private int threshold_agua;
 	private boolean esta_a_andar;
 	
-	
+	//meter os agentes a arranjarem a posição ideal
 	protected void setup(){
 		
 		System.out.println("Iniciar agente participativo");
@@ -84,6 +84,8 @@ public class Agente_Participativo extends Agent {
 					//como chamar a função de abastecimento?
 					//pode ser aqui? dentro do onTick?
 					//criação de um behaviour (simplebehaviour) dentro de outro behaviour?
+					
+					//R: fazer um oneshotbehaviour, ou fazer aqui (esta a andar)
 				}
 			}else {
 				
@@ -101,7 +103,7 @@ public class Agente_Participativo extends Agent {
 			receiver.setLocalName("Quartel");
 			
 			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-			msg.setContent(" " + posicaoX + ","  + posicaoY );
+			msg.setContent(" " + posicaoX + ","  + posicaoY ); // mais a outro informaçao (serializable)
 			msg.addReceiver(receiver);
 			myAgent.send(msg);
 
@@ -212,7 +214,7 @@ public class Agente_Participativo extends Agent {
 		
 	}
 	
-	protected void deslocar(float x_pos, float y_pos) {
+	protected void deslocar(float x_pos, float y_pos) { //add tickerbehaviour para ver os pontos a deslocarem-se, a cada 1s 
 		this.esta_a_andar = true;
 		this.posicaoX = x_pos;
 		this.posicaoY = y_pos;

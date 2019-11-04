@@ -44,6 +44,7 @@ public class Incendiário extends Agent {
 			//enviar ao quartel a posição do fogo
 			AID receiver = new AID();
 			receiver.setLocalName("Quartel");
+			//meter aqui o AID do interface
 			
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.setContent(" " + posX + ","  + posY );

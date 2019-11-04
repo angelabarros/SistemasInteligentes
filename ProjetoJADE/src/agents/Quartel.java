@@ -24,7 +24,7 @@ public class Quartel extends Agent {
 	}
 	
 	
-	private class EnviarAgente extends OneShotBehaviour{ //ou simplebehaviour?
+	private class EnviarAgente extends OneShotBehaviour{ 
 		
 		private AID agente;
 		
@@ -49,7 +49,7 @@ public class Quartel extends Agent {
 	
 	
 	private class Receiver extends CyclicBehaviour{
-		private float xFogoAtivo, yFogoAtivo, xAgente, yAgente;			//se for feito o processamento em paralelo ????????
+		private float xFogoAtivo, yFogoAtivo, xAgente, yAgente;			
 		private int agentesProcessados = 0;
 		private float minDistancia = 10000;
 		private AID agenteMaisProximo;
@@ -84,7 +84,7 @@ public class Quartel extends Agent {
 						agentes = new AID[resultado.length];
 						
 						
-						
+						//nao é necessário o parallelbehaviour
 						ParallelBehaviour pb = new ParallelBehaviour(myAgent, ParallelBehaviour.WHEN_ALL) {
 							
 							public int onEnd() {

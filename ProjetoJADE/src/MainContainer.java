@@ -12,7 +12,7 @@ public class MainContainer {
 	
 	
 	//fazer a definição do mapa
-	int[][] mapa = new int[100][100];
+	int[][] mapa = new int[100][100]; //passar esta info para os agentes
 	
 	//definir zonas do mapa (zonas residenciais, comerciais, etc)
 	
