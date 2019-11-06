@@ -17,48 +17,37 @@ import jade.lang.acl.ACLMessage;
 
 public class Agente_Participativo extends Agent {
 	
-	private float posicaoX, posicaoY; 
-	private int capacidade_max_agua, velocidade;
-	private int capacidade_max_combustivel;
-	private int capacidade_agua_presente;
-	private int capacidade_combustivel_presente;
-	private int threshold_combustivel;
-	private int threshold_agua;
-	private boolean esta_a_andar;
+	protected float posicaoX, posicaoY; 
+	protected int capacidade_max_agua, velocidade;
+	protected int capacidade_max_combustivel;
+	protected int capacidade_agua_presente;
+	protected int capacidade_combustivel_presente;
+	protected int threshold_combustivel;
+	protected int threshold_agua;
+	protected boolean esta_a_andar;
 	
 	//meter os agentes a arranjarem a posição ideal
 	protected void setup(){
 		
-		System.out.println("Iniciar agente participativo");
-		super.setup();
-		
-		//posições random (para já) {CAMIÃO}
-		Random rand = new Random();
-		this.posicaoX = rand.nextInt(100);
-		this.posicaoY = rand.nextInt(100);
-		this.velocidade = 1;
-		this.capacidade_max_agua = 10;
-		this.capacidade_max_combustivel = 10;
-		this.capacidade_agua_presente = 10;
-		this.capacidade_combustivel_presente = 10;
-		this.threshold_combustivel = 5;
-		this.threshold_agua = 2;
-		
-		DFAgentDescription dfd = new DFAgentDescription();
-		dfd.setName(getAID());
-		ServiceDescription sd = new ServiceDescription();
-		sd.setType("agente");
-		sd.setName(getLocalName());
-		dfd.addServices(sd);
-		
-		try {
-			DFService.register(this, dfd);
-			
-		}catch (FIPAException e) {
-			e.printStackTrace();
-		}
-		
-		
+		/*
+		 * System.out.println("Iniciar agente participativo"); super.setup();
+		 * 
+		 * //posições random (para já) {CAMIÃO} Random rand = new Random();
+		 * this.posicaoX = rand.nextInt(100); this.posicaoY = rand.nextInt(100);
+		 * this.velocidade = 1; this.capacidade_max_agua = 10;
+		 * this.capacidade_max_combustivel = 10; this.capacidade_agua_presente = 10;
+		 * this.capacidade_combustivel_presente = 10; this.threshold_combustivel = 5;
+		 * this.threshold_agua = 2;
+		 * 
+		 * DFAgentDescription dfd = new DFAgentDescription(); dfd.setName(getAID());
+		 * ServiceDescription sd = new ServiceDescription(); sd.setType("agente");
+		 * sd.setName(getLocalName()); dfd.addServices(sd);
+		 * 
+		 * try { DFService.register(this, dfd);
+		 * 
+		 * }catch (FIPAException e) { e.printStackTrace(); }
+		 * 
+		 */
 		
 		this.addBehaviour(new Recursos(this, 5000));
 		this.addBehaviour(new Receiver());
