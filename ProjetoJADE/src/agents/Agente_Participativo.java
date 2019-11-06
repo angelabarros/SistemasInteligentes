@@ -54,7 +54,7 @@ public class Agente_Participativo extends Agent {
 	}
 	
 	
-	private class Recursos extends TickerBehaviour {
+	protected class Recursos extends TickerBehaviour {
 		
 		public Recursos(Agent a, long period) {
 			super(a,period);
@@ -84,7 +84,7 @@ public class Agente_Participativo extends Agent {
 		
 	}
 	
-	private class Request extends SimpleBehaviour{
+	protected class Request extends SimpleBehaviour{
 		
 		public void action() {
 			//enviar ao quartel a posição do agente
@@ -106,7 +106,7 @@ public class Agente_Participativo extends Agent {
 	
 	
 	
-	private class Receiver extends CyclicBehaviour {
+	protected class Receiver extends CyclicBehaviour {
 		
 		public void action() {
 			//recebe mensagem para apagar fogo, assumindo que o agente tem combustível suficiente
@@ -211,7 +211,7 @@ public class Agente_Participativo extends Agent {
 		
 	}
 	
-	
+	//comunicação entre agentes para saber qual a melhor posição no mapa? (cooperação) [posterior]
 
 	
 	
