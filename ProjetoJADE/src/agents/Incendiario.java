@@ -8,7 +8,7 @@ import jade.core.behaviours.CyclicBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 
-public class Incendiário extends Agent {
+public class Incendiario extends Agent {
 
 	private int fogo_posicao_x;
 	private int fogo_posicao_y;
@@ -49,6 +49,7 @@ public class Incendiário extends Agent {
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.setContent(" " + posX + ","  + posY );
 			msg.addReceiver(receiver);
+			System.out.println("a enviar mensagem p/ quartel.....");
 			myAgent.send(msg);
 			
 			

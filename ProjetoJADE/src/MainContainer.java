@@ -22,7 +22,15 @@ public class MainContainer {
 	public static void main(String[] args) {
 		MainContainer a = new MainContainer();
 
-		a.initMainContainerInPlatform("localhost", "9888", "MainContainer");
+		a.initMainContainerInPlatform("localhost", "9889", "MainContainer");
+		
+		
+		//registar agentes participativos
+		a.startAgentInPlatform("Incendiario", "agents.Incendiario");
+		a.startAgentInPlatform("Quartel", "agents.Quartel");
+		a.startAgentInPlatform("Drone", "agents.Drone");
+		
+		
 
 	
 	}

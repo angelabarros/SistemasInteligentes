@@ -1,5 +1,7 @@
 package agents;
 
+import java.awt.Point;
+import java.util.List;
 import java.util.Random;
 
 import org.omg.CORBA.PRIVATE_MEMBER;
@@ -7,6 +9,7 @@ import org.omg.CORBA.PRIVATE_MEMBER;
 import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
@@ -19,12 +22,19 @@ public class Agente_Participativo extends Agent {
 	
 	protected float posicaoX, posicaoY; 
 	protected int capacidade_max_agua, velocidade;
-	protected int capacidade_max_combustivel;
+	protected float capacidade_max_combustivel;
 	protected int capacidade_agua_presente;
-	protected int capacidade_combustivel_presente;
-	protected int threshold_combustivel;
+	protected float capacidade_combustivel_presente;
+	protected float threshold_combustivel;
 	protected int threshold_agua;
 	protected boolean esta_a_andar;
+	
+	Point p = new Point(50, 50);
+	protected Point sitios_agua = p;
+	
+	Point q = new Point(60, 60);
+	protected Point sitios_combustivel = q;
+	
 	
 	//meter os agentes a arranjarem a posição ideal
 	protected void setup(){
@@ -50,7 +60,18 @@ public class Agente_Participativo extends Agent {
 		 */
 		
 		this.addBehaviour(new Recursos(this, 5000));
-		this.addBehaviour(new Receiver());
+		//this.addBehaviour(new Receiver());
+	}
+	
+	protected void takeDown() {
+		System.out.println("Ending++++++++++++");
+		try {
+			DFService.deregister(this);
+			
+		}catch(FIPAException e) {
+			e.printStackTrace();
+		}
+		super.takeDown();
 	}
 	
 	
@@ -60,6 +81,7 @@ public class Agente_Participativo extends Agent {
 			super(a,period);
 		}
 		
+		
 		public void onTick() {
 			//calcular a disponibilidade dos recursos atuais
 			
@@ -67,15 +89,28 @@ public class Agente_Participativo extends Agent {
 		
 				System.out.println("Recursos atuais: água= " + capacidade_agua_presente + " " 
 									+ "combustivel= " + capacidade_combustivel_presente);
-				Boolean comb_recursos = temRecursosSuficientes_combustivel();	//esta verificação deve ficar num tickerbehaviour? ou num cyclicbehaviour?
+				Boolean comb_recursos = temRecursosSuficientes_combustivel();
+				Boolean agua_recursos = temRecursosSuficientes_agua();
 				
 				if(comb_recursos == false) {
-					//como chamar a função de abastecimento?
-					//pode ser aqui? dentro do onTick?
-					//criação de um behaviour (simplebehaviour) dentro de outro behaviour?
+					deslocar(sitios_combustivel.x, sitios_combustivel.y);
+					if(sitios_combustivel.x == posicaoX && sitios_combustivel.y == posicaoY) { //chegou ao destino
+						capacidade_combustivel_presente = capacidade_max_combustivel;
+						System.out.println("Depósito de gasolina atestado!!!");
+						//fazer um contador de recursos gastos.....
+					}
 					
-					//R: fazer um oneshotbehaviour, ou fazer aqui (esta a andar)
 				}
+				if(agua_recursos == false) {
+					deslocar(sitios_agua.x, sitios_agua.y);
+					if(sitios_agua.x == posicaoX && sitios_agua.y == posicaoY) { //chegou ao destino
+						capacidade_agua_presente = capacidade_max_agua;
+						System.out.println("Depósito de água atestado!!!");
+						//fazer um contador de recursos gastos.....
+					}
+				}
+				
+				
 			}else {
 				
 			}
@@ -119,6 +154,7 @@ public class Agente_Participativo extends Agent {
 					
 				}
 				else if(msg.getPerformative() == ACLMessage.CONFIRM) { //este é o agente + proximo e tem que ir apagar o fogo...
+					System.out.println("TAS NO SITIO ERRADO");
 					String[] informacao_recebida = msg.getContent().split(",");
 					String xFogoAtivo = informacao_recebida[0];
 					String yFogoAtivo = informacao_recebida[1];
@@ -154,17 +190,10 @@ public class Agente_Participativo extends Agent {
 	
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	protected float calculaDistancia(float x_inicial, float x_dest, float y_inicial, float y_dest) {
 		
-		return (float) Math.sqrt((y_dest - y_inicial) * (y_dest - y_inicial) + (x_dest - x_inicial) * (x_dest - x_inicial));
+		float distance = (float) Math.sqrt(((Math.pow((x_dest - x_inicial), 2)) + (Math.pow((y_dest - y_inicial), 2))));
+		return distance;
 	
 	}
 	
@@ -197,13 +226,18 @@ public class Agente_Participativo extends Agent {
 		
 		float dist = this.calculaDistancia(this.posicaoX, X, this.posicaoY, Y);
 		
-		//considerando que se gasta 1 unidade de combustivel por cada 10 unidades de distância da matriz...
+		System.out.println("distancia percorrida:::::::::::::::::::::" + dist);
 		
-		return dist/10;
+		float aux = dist/10;
+		
+		//considerando que se gasta 1 unidade de combustivel por cada 10 unidades de distância da matriz...
+		System.out.println("GASTOUUUUUUUUUUUUUUUUUUUU:  " + aux);
+		return (aux);
 		
 	}
 	
 	protected void deslocar(float x_pos, float y_pos) { //add tickerbehaviour para ver os pontos a deslocarem-se, a cada 1s 
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^andando^^^^^^^^^^^^^^^^^^^^^");
 		this.esta_a_andar = true;
 		this.posicaoX = x_pos;
 		this.posicaoY = y_pos;
@@ -214,8 +248,7 @@ public class Agente_Participativo extends Agent {
 	//comunicação entre agentes para saber qual a melhor posição no mapa? (cooperação) [posterior]
 
 	
-	
-	
+
 	
 	
 		

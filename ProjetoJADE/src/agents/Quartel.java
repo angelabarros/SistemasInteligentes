@@ -14,8 +14,31 @@ import jade.util.leap.ArrayList;
 
 public class Quartel extends Agent {
 
+	float x = 0, y= 0;
+	
 	protected void setup() {
 		super.setup();
+		
+		System.out.print("Starting Quartel");
+		
+		DFAgentDescription dfd = new DFAgentDescription();
+		dfd.setName(getAID());
+		ServiceDescription sd = new ServiceDescription();
+		sd.setType("Quartel");
+		sd.setName(getLocalName());
+		dfd.addServices(sd);
+		
+		try {
+			
+			DFService.register(this, dfd);
+			
+		}catch (FIPAException e) {
+			e.printStackTrace();
+		}
+		
+		
+		this.addBehaviour(new Receiver());
+		//this.addBehaviour(new EnviarAgente(this.getAID(),x,y));
 	}
 	
 	
@@ -26,17 +49,23 @@ public class Quartel extends Agent {
 	
 	private class EnviarAgente extends OneShotBehaviour{ 
 		
+		private float x,y;
 		private AID agente;
 		
-		public EnviarAgente(AID agenteAID) {
+		public EnviarAgente(AID agenteAID, float x, float y) {
 			this.agente = agenteAID;
+			System.out.println("O agente é.............................");
+			this.x = x;
+			this.y = y;
 		}
 		
 		
 		
 		public void action() {
 			//vai mandar a mensagem para o agente
-			ACLMessage msg = new ACLMessage(ACLMessage.CFP);
+			ACLMessage msg = new ACLMessage(ACLMessage.CONFIRM);
+			System.out.println("agente.getName: " + agente.getName() + " " + "agente.getLocalName: " + agente.getLocalName());
+			msg.setContent(x + "," + y);
 			msg.addReceiver(agente);
 			myAgent.send(msg);
 		}
@@ -60,16 +89,18 @@ public class Quartel extends Agent {
 			if(msg != null) {
 				//mensagem vinda do incendiário
 				if(msg.getPerformative() == ACLMessage.INFORM) { //verificar
-					System.out.println("Há um fogo ativo!!!");
+					
 					//receber coordenadas do fogo ativo
 					String[] coordenadas = msg.getContent().split(",");
 					xFogoAtivo = Float.parseFloat(coordenadas[0]);
 					yFogoAtivo = Float.parseFloat(coordenadas[1]);
 					
+					System.out.println("Há um fogo ativo!!! x: " + xFogoAtivo + "y: " + yFogoAtivo);
+					
 					//chamar agentes participativos
 					DFAgentDescription template = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
-					sd.setType("agente");
+					sd.setType("Drone");
 					template.addServices(sd);
 					
 					//meter a contar um timer para o fogo ativo
@@ -98,10 +129,12 @@ public class Quartel extends Agent {
 						
 						
 						
+						System.out.println("resultado.length: " + resultado.length);
+						
 						
 						for (int i = 0; i < resultado.length; i++) {
 							agentes[i] = resultado[i].getName();
-							pb.addSubBehaviour(new EnviarAgente(agentes[i]));
+							pb.addSubBehaviour(new EnviarAgente(agentes[i], xFogoAtivo, yFogoAtivo));
 						}
 						
 						
@@ -109,7 +142,7 @@ public class Quartel extends Agent {
 						e.printStackTrace();
 					}
 					
-					
+				
 				
 			//mensagem vinda do agente participativo para informar a localização
 			} else if(msg.getPerformative() == ACLMessage.REQUEST) {
@@ -127,7 +160,8 @@ public class Quartel extends Agent {
 					agenteMaisProximo = msg.getSender();
 				}
 				
-				if(agentesProcessados == 17) { //ver isto depois....
+				System.out.println("17 coisas");
+				if(agentesProcessados == 17 ) { //ver isto depois....
 					//momento de escolha do agente para apagar fogo
 					ACLMessage mensagem = new ACLMessage(ACLMessage.CONFIRM);
 					mensagem.addReceiver(agenteMaisProximo);
@@ -140,6 +174,8 @@ public class Quartel extends Agent {
 				
 				
 				
+			}else if(msg.getPerformative() == ACLMessage.CONFIRM) {
+				System.out.println("FOGO. APAGADO. COM. SUCESSO.");
 			}
 				
 			}else {
