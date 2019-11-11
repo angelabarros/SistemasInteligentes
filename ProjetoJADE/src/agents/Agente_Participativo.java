@@ -60,6 +60,7 @@ public class Agente_Participativo extends Agent {
 		 */
 		
 		this.addBehaviour(new Recursos(this, 5000));
+		this.addBehaviour(new Request(this, 1000));
 		//this.addBehaviour(new Receiver());
 	}
 	
@@ -76,9 +77,10 @@ public class Agente_Participativo extends Agent {
 	
 	
 	protected class Recursos extends TickerBehaviour {
-		
+		private Agent ag;
 		public Recursos(Agent a, long period) {
 			super(a,period);
+			ag = a;
 		}
 		
 		
@@ -87,8 +89,8 @@ public class Agente_Participativo extends Agent {
 			
 			if(!esta_a_andar){
 		
-				System.out.println("Recursos atuais: água= " + capacidade_agua_presente + " " 
-									+ "combustivel= " + capacidade_combustivel_presente);
+				System.out.println( " ::agente:: " + ag.getLocalName() + " || Recursos atuais: água= " + capacidade_agua_presente + " " 
+									+ "combustivel= " + capacidade_combustivel_presente );
 				Boolean comb_recursos = temRecursosSuficientes_combustivel();
 				Boolean agua_recursos = temRecursosSuficientes_agua();
 				
@@ -119,23 +121,25 @@ public class Agente_Participativo extends Agent {
 		
 	}
 	
-	protected class Request extends SimpleBehaviour{
+	protected class Request extends TickerBehaviour{
+		private Agent ag;
+		public Request(Agent a, long period) {
+			super(a,period);
+			this.ag = a;
+		}
 		
-		public void action() {
+		public void onTick() {
 			//enviar ao quartel a posição do agente
 			AID receiver = new AID();
 			receiver.setLocalName("Quartel");
 			
 			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-			msg.setContent(" " + posicaoX + ","  + posicaoY ); // mais a outro informaçao (serializable)
+			msg.setContent(" " + posicaoX + ","  + posicaoY + "," + ag.getLocalName()); // mais a outro informaçao (serializable)
 			msg.addReceiver(receiver);
 			myAgent.send(msg);
 
 		}
 		
-		public boolean done() {
-			return true;
-		}
 		
 	}
 	

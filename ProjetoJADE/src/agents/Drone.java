@@ -14,7 +14,7 @@ public class Drone extends Agente_Participativo {
 	
 	protected void setup(){
 		
-		System.out.println("Iniciar agente drone!");
+		System.out.println("Iniciar agente drone!" + this.getLocalName());
 		super.setup();
 		
 		
@@ -49,7 +49,7 @@ public class Drone extends Agente_Participativo {
 	}
 	
 protected class Receiver2 extends CyclicBehaviour {
-		
+		private int agua_gasta = 1;
 		public void action() {
 			//recebe mensagem para apagar fogo, assumindo que o agente tem combustível suficiente
 			//if....recursos
@@ -72,13 +72,20 @@ protected class Receiver2 extends CyclicBehaviour {
 					float valor_a_gastar = calculaRecursos(Float.parseFloat(xFogoAtivo), Float.parseFloat(yFogoAtivo));
 					System.out.println("o valor a gastar é ------------------------------ " + valor_a_gastar);
 					
-					deslocar(Float.parseFloat(xFogoAtivo),Float.parseFloat(yFogoAtivo));
+					if((capacidade_combustivel_presente - valor_a_gastar) < threshold_combustivel) {
+						//copiar código
+					}
 					
+					
+					deslocar(Float.parseFloat(xFogoAtivo),Float.parseFloat(yFogoAtivo));
+			 		
 					//apagar o fogo
 					if(Float.parseFloat(xFogoAtivo) == posicaoX && Float.parseFloat(yFogoAtivo) == posicaoY) { //garantir que o agente chegou ao incendio
 						//atualizar os recursos
-						capacidade_agua_presente--;
+						capacidade_agua_presente -= agua_gasta;
 						capacidade_combustivel_presente -= valor_a_gastar;
+						yFogoAtivo = "0.0";
+						xFogoAtivo = "0.0";
 						
 					}
 					
@@ -88,7 +95,7 @@ protected class Receiver2 extends CyclicBehaviour {
 					receiver.setLocalName("Quartel");
 					
 					ACLMessage mensagem_sucesso = new ACLMessage(ACLMessage.CONFIRM);
-					mensagem_sucesso.setContent("sucesso");
+					mensagem_sucesso.setContent("sucesso" + "," + agua_gasta + "," + valor_a_gastar);
 					mensagem_sucesso.addReceiver(receiver);
 					myAgent.send(mensagem_sucesso);
 				}

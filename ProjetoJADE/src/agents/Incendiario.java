@@ -19,7 +19,7 @@ public class Incendiario extends Agent {
 		// TODO Auto-generated method stub
 		super.setup();
 		
-		this.addBehaviour(new Request(this, 10000));
+		this.addBehaviour(new Request(this, 20000));
 	
 		
 	}
@@ -43,27 +43,17 @@ public class Incendiario extends Agent {
 			
 			//enviar ao quartel a posição do fogo
 			AID receiver = new AID();
+			AID receiver_interface = new AID();
 			receiver.setLocalName("Quartel");
-			//meter aqui o AID do interface
+			receiver_interface.setLocalName("Interface");
 			
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			msg.setContent(" " + posX + ","  + posY );
 			msg.addReceiver(receiver);
+			msg.addReceiver(receiver_interface);
 			System.out.println("a enviar mensagem p/ quartel.....");
 			myAgent.send(msg);
-			
-			
-			//enviar à interface a posição do fogo
-//			AID receiver2 = new AID();
-//			receiver2.setLocalName("interface");
-//			
-//			ACLMessage msg2 = new ACLMessage(ACLMessage.INFORM);
-//			msg2.setContent("PosiçãoX: " + posX + " " + "PosiçãoY: " + posY );
-//			msg2.addReceiver(receiver2);
-//			myAgent.send(msg2);
-			
-			
-			
+					
 		}
 	}
 

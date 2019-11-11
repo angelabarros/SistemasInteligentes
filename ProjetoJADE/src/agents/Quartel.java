@@ -15,6 +15,9 @@ import jade.util.leap.ArrayList;
 public class Quartel extends Agent {
 
 	float x = 0, y= 0;
+	float total_combustivel_gasto = 0;
+	int total_agua_gasta = 0;
+	
 	
 	protected void setup() {
 		super.setup();
@@ -82,13 +85,13 @@ public class Quartel extends Agent {
 		private int agentesProcessados = 0;
 		private float minDistancia = 10000;
 		private AID agenteMaisProximo;
-		
+		private long time = 0;
 		
 		public void action() {
 			ACLMessage msg = receive();
 			if(msg != null) {
 				//mensagem vinda do incendiário
-				if(msg.getPerformative() == ACLMessage.INFORM) { //verificar
+				if(msg.getPerformative() == ACLMessage.INFORM) {
 					
 					//receber coordenadas do fogo ativo
 					String[] coordenadas = msg.getContent().split(",");
@@ -100,11 +103,14 @@ public class Quartel extends Agent {
 					//chamar agentes participativos
 					DFAgentDescription template = new DFAgentDescription();
 					ServiceDescription sd = new ServiceDescription();
-					sd.setType("Drone");
+					ServiceDescription sd_camiao = new ServiceDescription();
+					sd.setType("Drone"); //não posso meter só Drone
+					sd_camiao.setType("Camiao");
 					template.addServices(sd);
+					template.addServices(sd_camiao);
 					
 					//meter a contar um timer para o fogo ativo
-					
+					time = System.currentTimeMillis();
 					
 					//resultado de todos os agentes participativos
 					DFAgentDescription[] resultado;
@@ -132,10 +138,21 @@ public class Quartel extends Agent {
 						System.out.println("resultado.length: " + resultado.length);
 						
 						
-						for (int i = 0; i < resultado.length; i++) {
+						for (int i = 0; i < resultado.length; i++) { //vou ter que retirar daqui o enviar agente.. certo? (ñ tenho info de quem tá mais perto)
 							agentes[i] = resultado[i].getName();
-							pb.addSubBehaviour(new EnviarAgente(agentes[i], xFogoAtivo, yFogoAtivo));
+							
+							//tá a enviar todos os agentes....
+							
+							//pb.addSubBehaviour(new EnviarAgente(agentes[i], xFogoAtivo, yFogoAtivo));
+							
 						}
+						
+						
+						if(agenteMaisProximo != null) {
+							System.out.println("a enviar o agente mais proximo ........" + agenteMaisProximo.getLocalName());
+							pb.addSubBehaviour(new EnviarAgente(agenteMaisProximo, xFogoAtivo, yFogoAtivo));
+						}
+						
 						
 						
 					}catch (FIPAException e) {
@@ -148,34 +165,53 @@ public class Quartel extends Agent {
 			} else if(msg.getPerformative() == ACLMessage.REQUEST) {
 				//receber coordenadas do agente
 				String[] coordenadas = msg.getContent().split(",");
+				
 				xAgente = Float.parseFloat(coordenadas[0]);
+				System.out.println("x: " + coordenadas[0].toString() + " y: " + coordenadas[1].toString() + " |||||  agente: " + coordenadas[2].toString());
 				yAgente = Float.parseFloat(coordenadas[1]);
 				//preencher o array
+				
+				
 				//calculo do agente + proximo (retorna o agente + proximo)
-				agentesProcessados++;
+			 	agentesProcessados++;
+				
+				System.out.println("FOGOATIVO: " +  xFogoAtivo + " Y: " + yFogoAtivo);
 				
 				float distancia = (float) Math.sqrt((yFogoAtivo - yAgente) * (yFogoAtivo - yAgente) + (xFogoAtivo - xAgente) * (xFogoAtivo - xAgente));
 				if(distancia < minDistancia) {
 					minDistancia = distancia;
 					agenteMaisProximo = msg.getSender();
+					System.out.println("agente + próximo: " + agenteMaisProximo.getLocalName());
 				}
-				
-				System.out.println("17 coisas");
-				if(agentesProcessados == 17 ) { //ver isto depois....
-					//momento de escolha do agente para apagar fogo
-					ACLMessage mensagem = new ACLMessage(ACLMessage.CONFIRM);
-					mensagem.addReceiver(agenteMaisProximo);
-					mensagem.setContent(xFogoAtivo + "," + yFogoAtivo);
-					myAgent.send(mensagem);
-					agentesProcessados = 0;
-					minDistancia = 10000;
-					agenteMaisProximo = null;
-				}
+				 
+				//System.out.println("17 coisas");
+					/*
+					 * if(agentesProcessados == 17 ) { //ver isto depois.... //momento de escolha do
+					 * agente para apagar fogo ACLMessage mensagem = new
+					 * ACLMessage(ACLMessage.CONFIRM); mensagem.addReceiver(agenteMaisProximo);
+					 * mensagem.setContent(xFogoAtivo + "," + yFogoAtivo); myAgent.send(mensagem);
+					 * agentesProcessados = 0; minDistancia = 10000; agenteMaisProximo = null; }
+					 */
 				
 				
 				
 			}else if(msg.getPerformative() == ACLMessage.CONFIRM) {
 				System.out.println("FOGO. APAGADO. COM. SUCESSO.");
+				this.xFogoAtivo = 0;
+				this.yFogoAtivo = 0;
+				long time_final = 0;
+				time_final = System.currentTimeMillis();
+				long result = time_final - time;
+				System.out.println("TEMPO DURAÇÃO: " + result);
+				String[] mensagem = msg.getContent().split(",");
+				String agua_gasta = mensagem[1].toString();
+				String combustivel_gasto = mensagem[2].toString();
+				
+				total_agua_gasta += Integer.parseInt(agua_gasta);
+				total_combustivel_gasto += Float.parseFloat(combustivel_gasto);
+				
+				System.out.println("TOTAL DOS RECURSOS GASTOS ATÉ AGORA:");
+				System.out.println("Água: " + total_agua_gasta + " || Combustivel: " + total_combustivel_gasto);
 			}
 				
 			}else {

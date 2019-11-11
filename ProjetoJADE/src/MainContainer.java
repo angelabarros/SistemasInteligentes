@@ -29,6 +29,9 @@ public class MainContainer {
 		a.startAgentInPlatform("Incendiario", "agents.Incendiario");
 		a.startAgentInPlatform("Quartel", "agents.Quartel");
 		a.startAgentInPlatform("Drone", "agents.Drone");
+		a.startAgentInPlatform("Drone1", "agents.Drone");
+		a.startAgentInPlatform("Drone2", "agents.Drone");
+		a.startAgentInPlatform("Camiao", "agents.camiao");
 		
 		
 
