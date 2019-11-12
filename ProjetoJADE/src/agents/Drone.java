@@ -10,6 +10,8 @@ import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
+//meter a info numa classe auxiliar, importar a classe e começar a utilizar as funçoes.
+
 public class Drone extends Agente_Participativo {
 	
 	protected void setup(){
@@ -74,6 +76,7 @@ protected class Receiver2 extends CyclicBehaviour {
 					
 					if((capacidade_combustivel_presente - valor_a_gastar) < threshold_combustivel) {
 						//copiar código
+						
 					}
 					
 					

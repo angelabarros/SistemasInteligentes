@@ -86,6 +86,7 @@ public class Quartel extends Agent {
 		private float minDistancia = 10000;
 		private AID agenteMaisProximo;
 		private long time = 0;
+		private int res=0;
 		
 		public void action() {
 			ACLMessage msg = receive();
@@ -101,13 +102,13 @@ public class Quartel extends Agent {
 					System.out.println("Há um fogo ativo!!! x: " + xFogoAtivo + "y: " + yFogoAtivo);
 					
 					//chamar agentes participativos
-					DFAgentDescription template = new DFAgentDescription();
+					DFAgentDescription template = new DFAgentDescription(); //duplicar e depois fazer merge
 					ServiceDescription sd = new ServiceDescription();
-					ServiceDescription sd_camiao = new ServiceDescription();
+					//ServiceDescription sd_camiao = new ServiceDescription();
 					sd.setType("Drone"); //não posso meter só Drone
-					sd_camiao.setType("Camiao");
+					//sd_camiao.setType("Camiao");
 					template.addServices(sd);
-					template.addServices(sd_camiao);
+					//template.addServices(sd_camiao);
 					
 					//meter a contar um timer para o fogo ativo
 					time = System.currentTimeMillis();
@@ -117,6 +118,7 @@ public class Quartel extends Agent {
 					
 					try {
 						resultado = DFService.search(myAgent, template);
+						res = resultado.length;
 						AID[] agentes;
 						agentes = new AID[resultado.length];
 						
@@ -169,13 +171,14 @@ public class Quartel extends Agent {
 				xAgente = Float.parseFloat(coordenadas[0]);
 				System.out.println("x: " + coordenadas[0].toString() + " y: " + coordenadas[1].toString() + " |||||  agente: " + coordenadas[2].toString());
 				yAgente = Float.parseFloat(coordenadas[1]);
-				//preencher o array
+				//preencher hashmap com a key do fogo
 				
 				
 				//calculo do agente + proximo (retorna o agente + proximo)
-			 	agentesProcessados++;
+			 	agentesProcessados++; 
 				
 				System.out.println("FOGOATIVO: " +  xFogoAtivo + " Y: " + yFogoAtivo);
+				
 				
 				float distancia = (float) Math.sqrt((yFogoAtivo - yAgente) * (yFogoAtivo - yAgente) + (xFogoAtivo - xAgente) * (xFogoAtivo - xAgente));
 				if(distancia < minDistancia) {
@@ -184,14 +187,17 @@ public class Quartel extends Agent {
 					System.out.println("agente + próximo: " + agenteMaisProximo.getLocalName());
 				}
 				 
-				//System.out.println("17 coisas");
-					/*
-					 * if(agentesProcessados == 17 ) { //ver isto depois.... //momento de escolha do
-					 * agente para apagar fogo ACLMessage mensagem = new
-					 * ACLMessage(ACLMessage.CONFIRM); mensagem.addReceiver(agenteMaisProximo);
-					 * mensagem.setContent(xFogoAtivo + "," + yFogoAtivo); myAgent.send(mensagem);
-					 * agentesProcessados = 0; minDistancia = 10000; agenteMaisProximo = null; }
-					 */
+					
+			     if(agentesProcessados == res ) { 
+					  ACLMessage mensagem = new ACLMessage(ACLMessage.CONFIRM); 
+					  mensagem.addReceiver(agenteMaisProximo);
+					  mensagem.setContent(xFogoAtivo + "," + yFogoAtivo); 
+					  myAgent.send(mensagem);
+					  agentesProcessados = 0; 
+					  minDistancia = 10000; 
+					  agenteMaisProximo = null; 
+				  }
+					 
 				
 				
 				

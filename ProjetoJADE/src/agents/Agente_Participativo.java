@@ -59,6 +59,11 @@ public class Agente_Participativo extends Agent {
 		 * 
 		 */
 		
+		
+		 //mandar coordenadas apra o quartel...
+		
+		
+		
 		this.addBehaviour(new Recursos(this, 5000));
 		this.addBehaviour(new Request(this, 1000));
 		//this.addBehaviour(new Receiver());
@@ -121,7 +126,7 @@ public class Agente_Participativo extends Agent {
 		
 	}
 	
-	protected class Request extends TickerBehaviour{
+	protected class Request extends TickerBehaviour{ //apagar isto e fazer um oneshot a informar sempre que me mexer
 		private Agent ag;
 		public Request(Agent a, long period) {
 			super(a,period);
