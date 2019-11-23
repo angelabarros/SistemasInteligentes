@@ -101,14 +101,11 @@ public class Quartel extends Agent {
 					
 					System.out.println("Há um fogo ativo!!! x: " + xFogoAtivo + "y: " + yFogoAtivo);
 					
-					//chamar agentes participativos
+					//chamar agentes participativos - drones
 					DFAgentDescription template = new DFAgentDescription(); //duplicar e depois fazer merge
 					ServiceDescription sd = new ServiceDescription();
-					//ServiceDescription sd_camiao = new ServiceDescription();
-					sd.setType("Drone"); //não posso meter só Drone
-					//sd_camiao.setType("Camiao");
+					sd.setType("Drone");
 					template.addServices(sd);
-					//template.addServices(sd_camiao);
 					
 					//meter a contar um timer para o fogo ativo
 					time = System.currentTimeMillis();
