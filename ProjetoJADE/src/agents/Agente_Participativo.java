@@ -36,8 +36,8 @@ public class Agente_Participativo extends Agent {
 	
 	Point q = new Point(60, 60);
 	protected Point sitios_combustivel = q;
-	
-	public float getPosicaoX() {
+
+	public int getPosicaoX() {
 		return posicaoX;
 	}
 
@@ -45,7 +45,7 @@ public class Agente_Participativo extends Agent {
 		this.posicaoX = posicaoX;
 	}
 
-	public float getPosicaoY() {
+	public int getPosicaoY() {
 		return posicaoY;
 	}
 
@@ -136,7 +136,7 @@ public class Agente_Participativo extends Agent {
 					deslocar(sitios_combustivel.x, sitios_combustivel.y);
 					if(sitios_combustivel.x == posicaoX && sitios_combustivel.y == posicaoY) { //chegou ao destino
 						capacidade_combustivel_presente = capacidade_max_combustivel;
-						System.out.println("Depósito de gasolina atestado!!!");
+						System.out.println("Depósito de gasolina atestado!!! " + this.ag.getLocalName());
 						//fazer um contador de recursos gastos.....
 					}
 					
@@ -296,6 +296,10 @@ public class Agente_Participativo extends Agent {
 		this.esta_a_andar = true;
 		this.posicaoX = x_pos;
 		this.posicaoY = y_pos;
+		
+		
+		
+		
 		this.esta_a_andar = !esta_a_andar;
 		
 	}

@@ -48,7 +48,7 @@ public class Incendiario extends Agent {
 			receiver_interface.setLocalName("Interface");
 			
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-			msg.setContent(" " + posX + ","  + posY );
+			msg.setContent(posX + ","  + posY );
 			msg.addReceiver(receiver);
 			msg.addReceiver(receiver_interface);
 			System.out.println("a enviar mensagem p/ quartel.....");

@@ -79,8 +79,9 @@ protected class Receiver2 extends CyclicBehaviour {
 						
 					}
 					
-					
-					deslocar(Integer.parseInt(xFogoAtivo),Integer.parseInt(yFogoAtivo));
+					int aux_x = (int) Float.parseFloat(xFogoAtivo);
+					int aux_y = (int) Float.parseFloat(yFogoAtivo);
+					deslocar(aux_x,aux_y);
 			 		
 					//apagar o fogo
 					if(Float.parseFloat(xFogoAtivo) == posicaoX && Float.parseFloat(yFogoAtivo) == posicaoY) { //garantir que o agente chegou ao incendio

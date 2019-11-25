@@ -6,22 +6,28 @@ import jade.core.AID;
 
 public class Custom_Message implements Serializable{
 	
-	private float posicaoX;
-	private float posicaoY;
+	private int posicaoX;
+	private int posicaoY;
 	private AID aid_agente;
 	private String localName_agente;
-	public float getPosicaoX() {
+	
+	
+	public int getPosicaoX() {
 		return posicaoX;
 	}
-	public void setPosicaoX(float posicaoX) {
-		this.posicaoX = posicaoX;
-	}
-	public float getPosicaoY() {
+
+	public int getPosicaoY() {
 		return posicaoY;
 	}
-	public void setPosicaoY(float posicaoY) {
+
+	public void setPosicaoY(int posicaoY) {
 		this.posicaoY = posicaoY;
 	}
+
+	public void setPosicaoX(int posicaoX) {
+		this.posicaoX = posicaoX;
+	}
+
 	public AID getAid_agente() {
 		return aid_agente;
 	}
