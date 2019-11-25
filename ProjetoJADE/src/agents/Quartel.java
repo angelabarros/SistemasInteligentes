@@ -178,7 +178,7 @@ public class Quartel extends Agent {
 						    System.out.println(entry.getKey() + " = " + entry.getValue());
 						}
 						
-						calcularAgenteMaisProximo(xFogoAtivo, yFogoAtivo);
+						calcularAgenteMaisProximo(agentes_mapa.values(), xFogoAtivo, yFogoAtivo);
 						
 						if(agenteMaisProximo_nome != null) {
 							System.out.println("a enviar o agente mais proximo ........" + agenteMaisProximo_nome);
@@ -280,21 +280,21 @@ public class Quartel extends Agent {
 		}
 		
 		//calc
-		protected void calcularAgenteMaisProximo(float x, float y) {
+		protected void calcularAgenteMaisProximo(Collection<Agente_Participativo>agentes_ativos, float x, float y) {
 			float distancia = 0;
 			
 			//agentes_mapa;
 			System.out.println("simulando coisas");
-//			for(Agente_Participativo agente : agentes_ativos) {
-//				distancia = (float) Math.sqrt((y - agente.getPosicaoY()) * (y - agente.getPosicaoY()) + (x - agente.getPosicaoX()) * (x - agente.getPosicaoX()));
-//				System.out.println(distancia);
-//				if(distancia < minDistancia) {
-//					minDistancia = distancia;
-//					agenteMaisProximo_nome = agente.getAgente_nome();
-//					agenteMaisProximo = agente.getAid_agente();
-//					
-//				}
-//			}
+			for(Agente_Participativo agente : agentes_ativos) {
+				distancia = (float) Math.sqrt((y - agente.getPosicaoY()) * (y - agente.getPosicaoY()) + (x - agente.getPosicaoX()) * (x - agente.getPosicaoX()));
+				System.out.println(distancia);
+				if(distancia < minDistancia) {
+					minDistancia = distancia;
+					agenteMaisProximo_nome = agente.getAgente_nome();
+					agenteMaisProximo = agente.getAid_agente();
+					
+				}
+			}
 			agenteMaisProximo_nome.toString();
 			System.out.println("agente + próximo: " + agenteMaisProximo_nome);
 			
