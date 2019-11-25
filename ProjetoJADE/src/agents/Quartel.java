@@ -10,7 +10,16 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 import jade.util.leap.ArrayList;
+import jade.util.leap.HashMap;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+import com.sun.xml.internal.ws.policy.sourcemodel.AssertionData;
 
 public class Quartel extends Agent {
 
@@ -54,12 +63,14 @@ public class Quartel extends Agent {
 		
 		private float x,y;
 		private AID agente;
+		private String nome_agente;
 		
-		public EnviarAgente(AID agenteAID, float x, float y) {
+		public EnviarAgente(AID agenteAID, float x, float y, String nome) {
 			this.agente = agenteAID;
 			System.out.println("O agente é.............................");
 			this.x = x;
 			this.y = y;
+			this.nome_agente = nome;
 		}
 		
 		
@@ -67,7 +78,7 @@ public class Quartel extends Agent {
 		public void action() {
 			//vai mandar a mensagem para o agente
 			ACLMessage msg = new ACLMessage(ACLMessage.CONFIRM);
-			System.out.println("agente.getName: " + agente.getName() + " " + "agente.getLocalName: " + agente.getLocalName());
+			System.out.println("agente.getName: " + agente.getName() + " " + "agente.getLocalName: " + nome_agente);
 			msg.setContent(x + "," + y);
 			msg.addReceiver(agente);
 			myAgent.send(msg);
@@ -81,16 +92,28 @@ public class Quartel extends Agent {
 	
 	
 	private class Receiver extends CyclicBehaviour{
-		private float xFogoAtivo, yFogoAtivo, xAgente, yAgente;			
+		private float xFogoAtivo, yFogoAtivo, xAgente, yAgente;
+		private String nome_agente;
 		private int agentesProcessados = 0;
 		private float minDistancia = 10000;
 		private AID agenteMaisProximo;
+		private String agenteMaisProximo_nome;
 		private long time = 0;
 		private int res=0;
+		java.util.HashMap<String, Agente_Participativo> agentes_mapa = new java.util.HashMap<String, Agente_Participativo>();
+		
 		
 		public void action() {
 			ACLMessage msg = receive();
 			if(msg != null) {
+				try {
+					Object content = msg.getContentObject();
+					System.out.println(content.toString());
+					
+				} catch (UnreadableException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				//mensagem vinda do incendiário
 				if(msg.getPerformative() == ACLMessage.INFORM) {
 					
@@ -110,14 +133,28 @@ public class Quartel extends Agent {
 					//meter a contar um timer para o fogo ativo
 					time = System.currentTimeMillis();
 					
+					//chamar agentes participativos - camiao
+					DFAgentDescription template_camiao = new DFAgentDescription();
+					ServiceDescription sd_camiao = new ServiceDescription();
+					sd_camiao.setType("Camiao");
+					template_camiao.addServices(sd_camiao);
+					
+					
+					
 					//resultado de todos os agentes participativos
-					DFAgentDescription[] resultado;
+					DFAgentDescription[] resultado_drones, resultado_camiao, resultado;
+					
+					
+					
+					
 					
 					try {
-						resultado = DFService.search(myAgent, template);
-						res = resultado.length;
+						resultado_drones = DFService.search(myAgent, template);
+						resultado_camiao = DFService.search(myAgent, template_camiao);
+						//resultado = resultado_drones;
+						res = resultado_camiao.length + resultado_drones.length;
 						AID[] agentes;
-						agentes = new AID[resultado.length];
+						agentes = new AID[res];
 						
 						
 						//nao é necessário o parallelbehaviour
@@ -134,22 +171,22 @@ public class Quartel extends Agent {
 						
 						
 						
-						System.out.println("resultado.length: " + resultado.length);
+						System.out.println("resultado_dos_dois.length: " + res);
 						
-						
-						for (int i = 0; i < resultado.length; i++) { //vou ter que retirar daqui o enviar agente.. certo? (ñ tenho info de quem tá mais perto)
-							agentes[i] = resultado[i].getName();
-							
-							//tá a enviar todos os agentes....
-							
-							//pb.addSubBehaviour(new EnviarAgente(agentes[i], xFogoAtivo, yFogoAtivo));
-							
+						//fazer calculo agente mais proximo
+						for (Map.Entry<String, Agente_Participativo> entry : agentes_mapa.entrySet()) {
+						    System.out.println(entry.getKey() + " = " + entry.getValue());
 						}
 						
+						calcularAgenteMaisProximo(xFogoAtivo, yFogoAtivo);
 						
-						if(agenteMaisProximo != null) {
-							System.out.println("a enviar o agente mais proximo ........" + agenteMaisProximo.getLocalName());
-							pb.addSubBehaviour(new EnviarAgente(agenteMaisProximo, xFogoAtivo, yFogoAtivo));
+						if(agenteMaisProximo_nome != null) {
+							System.out.println("a enviar o agente mais proximo ........" + agenteMaisProximo_nome);
+							pb.addSubBehaviour(new EnviarAgente(agenteMaisProximo, xFogoAtivo, yFogoAtivo, agenteMaisProximo_nome));
+							//limpar variáveis
+							agenteMaisProximo = null;
+							agentesProcessados = 0; 
+							minDistancia = 10000;
 						}
 						
 						
@@ -166,35 +203,54 @@ public class Quartel extends Agent {
 				String[] coordenadas = msg.getContent().split(",");
 				
 				xAgente = Float.parseFloat(coordenadas[0]);
-				System.out.println("x: " + coordenadas[0].toString() + " y: " + coordenadas[1].toString() + " |||||  agente: " + coordenadas[2].toString());
+				System.out.println("x: " + coordenadas[0].toString() + " y: " + coordenadas[1].toString() 
+										 + " |||||  agente: " + coordenadas[2].toString()
+										 + " && AID: " + coordenadas[3].toString());
 				yAgente = Float.parseFloat(coordenadas[1]);
-				//preencher hashmap com a key do fogo
+				nome_agente = coordenadas[2].toString();
 				
+				
+				//preencher hashmap com a key do fogo -- depois!!!!!
+				Agente_Participativo agente_novo = new Agente_Participativo();
+				agente_novo.setPosicaoX((int)xAgente);
+				agente_novo.setAgente_nome(nome_agente);
+				AID a = new AID(coordenadas[3].toString(), false);
+				agente_novo.setAid_agente(a);
+				
+				
+				
+				System.out.println(coordenadas[3].toString());
+				System.out.println(a.toString());
+				
+				agente_novo.setPosicaoY((int)yAgente);
+				agentes_mapa.put(nome_agente, agente_novo);
+				
+				agentes_mapa.toString();
 				
 				//calculo do agente + proximo (retorna o agente + proximo)
-			 	agentesProcessados++; 
-				
-				System.out.println("FOGOATIVO: " +  xFogoAtivo + " Y: " + yFogoAtivo);
-				
-				
-				float distancia = (float) Math.sqrt((yFogoAtivo - yAgente) * (yFogoAtivo - yAgente) + (xFogoAtivo - xAgente) * (xFogoAtivo - xAgente));
-				if(distancia < minDistancia) {
-					minDistancia = distancia;
-					agenteMaisProximo = msg.getSender();
-					System.out.println("agente + próximo: " + agenteMaisProximo.getLocalName());
-				}
-				 
-					
-			     if(agentesProcessados == res ) { 
-					  ACLMessage mensagem = new ACLMessage(ACLMessage.CONFIRM); 
-					  mensagem.addReceiver(agenteMaisProximo);
-					  mensagem.setContent(xFogoAtivo + "," + yFogoAtivo); 
-					  myAgent.send(mensagem);
-					  agentesProcessados = 0; 
-					  minDistancia = 10000; 
-					  agenteMaisProximo = null; 
-				  }
-					 
+//			 	agentesProcessados++; 
+//				
+//				System.out.println("FOGOATIVO: " +  xFogoAtivo + " Y: " + yFogoAtivo);
+//				
+//				
+//				float distancia = (float) Math.sqrt((yFogoAtivo - yAgente) * (yFogoAtivo - yAgente) + (xFogoAtivo - xAgente) * (xFogoAtivo - xAgente));
+//				if(distancia < minDistancia) {
+//					minDistancia = distancia;
+//					agenteMaisProximo = msg.getSender();
+//					System.out.println("agente + próximo: " + agenteMaisProximo.getLocalName());
+//				}
+//				 
+//					
+//			     if(agentesProcessados == res ) { 
+//					  ACLMessage mensagem = new ACLMessage(ACLMessage.CONFIRM); 
+//					  mensagem.addReceiver(agenteMaisProximo);
+//					  mensagem.setContent(xFogoAtivo + "," + yFogoAtivo); 
+//					  myAgent.send(mensagem);
+//					  agentesProcessados = 0; 
+//					  minDistancia = 10000; 
+//					  agenteMaisProximo = null; 
+//				  }
+//					 
 				
 				
 				
@@ -222,5 +278,29 @@ public class Quartel extends Agent {
 			}
 			
 		}
+		
+		//calc
+		protected void calcularAgenteMaisProximo(float x, float y) {
+			float distancia = 0;
+			
+			//agentes_mapa;
+			System.out.println("simulando coisas");
+//			for(Agente_Participativo agente : agentes_ativos) {
+//				distancia = (float) Math.sqrt((y - agente.getPosicaoY()) * (y - agente.getPosicaoY()) + (x - agente.getPosicaoX()) * (x - agente.getPosicaoX()));
+//				System.out.println(distancia);
+//				if(distancia < minDistancia) {
+//					minDistancia = distancia;
+//					agenteMaisProximo_nome = agente.getAgente_nome();
+//					agenteMaisProximo = agente.getAid_agente();
+//					
+//				}
+//			}
+			agenteMaisProximo_nome.toString();
+			System.out.println("agente + próximo: " + agenteMaisProximo_nome);
+			
+			
+			
+			
+			 }
 	}
 }

@@ -20,7 +20,7 @@ import jade.lang.acl.ACLMessage;
 
 public class Agente_Participativo extends Agent {
 	
-	protected float posicaoX, posicaoY; 
+	protected int posicaoX, posicaoY; 
 	protected int capacidade_max_agua, velocidade;
 	protected float capacidade_max_combustivel;
 	protected int capacidade_agua_presente;
@@ -28,6 +28,8 @@ public class Agente_Participativo extends Agent {
 	protected float threshold_combustivel;
 	protected int threshold_agua;
 	protected boolean esta_a_andar;
+	protected String agente_nome;
+	protected AID aid_agente;
 	
 	Point p = new Point(50, 50);
 	protected Point sitios_agua = p;
@@ -35,7 +37,38 @@ public class Agente_Participativo extends Agent {
 	Point q = new Point(60, 60);
 	protected Point sitios_combustivel = q;
 	
-	
+	public float getPosicaoX() {
+		return posicaoX;
+	}
+
+	public void setPosicaoX(int posicaoX) {
+		this.posicaoX = posicaoX;
+	}
+
+	public float getPosicaoY() {
+		return posicaoY;
+	}
+
+	public void setPosicaoY(int posicaoY) {
+		this.posicaoY = posicaoY;
+	}
+
+	public String getAgente_nome() {
+		return agente_nome;
+	}
+
+	public void setAgente_nome(String agente_nome) {
+		this.agente_nome = agente_nome;
+	}
+
+	public AID getAid_agente() {
+		return aid_agente;
+	}
+
+	public void setAid_agente(AID aid_agente) {
+		this.aid_agente = aid_agente;
+	}
+
 	//meter os agentes a arranjarem a posição ideal
 	protected void setup(){
 		
@@ -138,8 +171,21 @@ public class Agente_Participativo extends Agent {
 			AID receiver = new AID();
 			receiver.setLocalName("Quartel");
 			
+			Custom_Message cm = new Custom_Message();
+			cm.setAid_agente(ag.getAID());
+			cm.setLocalName_agente(ag.getLocalName());
+			cm.setPosicaoX(posicaoX);
+			cm.setPosicaoY(posicaoY);
+			
+			
 			ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-			msg.setContent(" " + posicaoX + ","  + posicaoY + "," + ag.getLocalName()); // mais a outro informaçao (serializable)
+//			msg.setContent(" " + posicaoX + ","  + posicaoY + "," + ag.getLocalName() + "," + ag.getAID()); // mais a outro informaçao (serializable)
+			
+			try {
+				msg.setContentObject(cm);
+			}catch(Exception ex) {
+				ex.printStackTrace();
+			}
 			msg.addReceiver(receiver);
 			myAgent.send(msg);
 
@@ -168,7 +214,7 @@ public class Agente_Participativo extends Agent {
 					String xFogoAtivo = informacao_recebida[0];
 					String yFogoAtivo = informacao_recebida[1];
 					//deslocação até ao fogo
-					deslocar(Float.parseFloat(xFogoAtivo),Float.parseFloat(yFogoAtivo));
+					deslocar(Integer.parseInt(xFogoAtivo),Integer.parseInt(yFogoAtivo));
 					
 					//apagar o fogo
 					if(Float.parseFloat(xFogoAtivo) == posicaoX && Float.parseFloat(yFogoAtivo) == posicaoY) { //garantir que o agente chegou ao incendio
@@ -245,7 +291,7 @@ public class Agente_Participativo extends Agent {
 		
 	}
 	
-	protected void deslocar(float x_pos, float y_pos) { //add tickerbehaviour para ver os pontos a deslocarem-se, a cada 1s 
+	protected void deslocar(int x_pos, int y_pos) { //add tickerbehaviour para ver os pontos a deslocarem-se, a cada 1s 
 		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^andando^^^^^^^^^^^^^^^^^^^^^");
 		this.esta_a_andar = true;
 		this.posicaoX = x_pos;

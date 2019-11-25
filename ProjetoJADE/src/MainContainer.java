@@ -31,7 +31,7 @@ public class MainContainer {
 		a.startAgentInPlatform("Drone", "agents.Drone");
 		a.startAgentInPlatform("Drone1", "agents.Drone");
 		a.startAgentInPlatform("Drone2", "agents.Drone");
-		//a.startAgentInPlatform("Camiao", "agents.camiao");
+		a.startAgentInPlatform("Camiao", "agents.camiao");
 		
 		
 
