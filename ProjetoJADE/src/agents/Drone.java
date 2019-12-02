@@ -76,6 +76,7 @@ protected class Receiver2 extends CyclicBehaviour {
 					
 					if((capacidade_combustivel_presente - valor_a_gastar) < threshold_combustivel) {
 						//copiar código
+						//ESTA PARTE!!!!!!!!!
 						
 					}
 					

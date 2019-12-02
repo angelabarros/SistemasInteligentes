@@ -1,6 +1,7 @@
 package agents;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -36,7 +37,8 @@ public class Agente_Participativo extends Agent {
 	
 	Point q = new Point(60, 60);
 	protected Point sitios_combustivel = q;
-
+	
+	
 	public int getPosicaoX() {
 		return posicaoX;
 	}
@@ -93,8 +95,6 @@ public class Agente_Participativo extends Agent {
 		 */
 		
 		
-		 //mandar coordenadas apra o quartel...
-		
 		
 		
 		this.addBehaviour(new Recursos(this, 5000));
@@ -133,6 +133,9 @@ public class Agente_Participativo extends Agent {
 				Boolean agua_recursos = temRecursosSuficientes_agua();
 				
 				if(comb_recursos == false) {
+					//calcular distancia dos postos de combustivel
+					
+					//deslocar para o posto mais próximo
 					deslocar(sitios_combustivel.x, sitios_combustivel.y);
 					if(sitios_combustivel.x == posicaoX && sitios_combustivel.y == posicaoY) { //chegou ao destino
 						capacidade_combustivel_presente = capacidade_max_combustivel;
