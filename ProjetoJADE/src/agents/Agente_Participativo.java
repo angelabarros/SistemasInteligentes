@@ -106,6 +106,18 @@ public class Agente_Participativo extends Agent {
 		sitios_water.add(new Point(20, 84));
 		
 		
+		//10 pontos de gasolina
+		sitios_gasolina.add(new Point(10,10));
+		sitios_gasolina.add(new Point(20,20));
+		sitios_gasolina.add(new Point(88,33));
+		sitios_gasolina.add(new Point(30,55));
+		sitios_gasolina.add(new Point(49,97));
+		sitios_gasolina.add(new Point(68,22));
+		sitios_gasolina.add(new Point(70,30));
+		sitios_gasolina.add(new Point(95,48));
+		sitios_gasolina.add(new Point(50, 40));
+		sitios_gasolina.add(new Point(79, 66));
+		
 		/*
 		 * System.out.println("Iniciar agente participativo"); super.setup();
 		 * 
@@ -163,17 +175,17 @@ public class Agente_Participativo extends Agent {
 									+ "combustivel= " + capacidade_combustivel_presente );
 				Boolean comb_recursos = temRecursosSuficientes_combustivel();
 				Boolean agua_recursos = temRecursosSuficientes_agua();
+				Point abastecimento = new Point(0,0);
 				
 				if(comb_recursos == false) {
+					
 					//calcular distancia dos postos de combustivel
-					
-					//deslocar para o posto mais próximo
-					
-					Point abastecimento = new Point(0,0);
-					
 					abastecimento = getAbastecimentoMaisProximo(posicaoX, posicaoY, sitios_gasolina);
 					
+					//deslocar para o posto mais próximo
 					deslocar(abastecimento.x, abastecimento.y);
+					
+					
 					if(abastecimento.x == posicaoX && abastecimento.y == posicaoY) { //chegou ao destino
 						capacidade_combustivel_presente = capacidade_max_combustivel;
 						System.out.println("Depósito de gasolina atestado!!! " + this.ag.getLocalName());
@@ -182,8 +194,15 @@ public class Agente_Participativo extends Agent {
 					
 				}
 				if(agua_recursos == false) {
-					deslocar(sitios_agua.x, sitios_agua.y);
-					if(sitios_agua.x == posicaoX && sitios_agua.y == posicaoY) { //chegou ao destino
+					
+					//calcular distancia dos postos de agua
+					abastecimento = getAbastecimentoMaisProximo(posicaoX, posicaoY, sitios_water);
+					
+					//deslocar para o posto mais próximo
+					deslocar(abastecimento.x, abastecimento.y);
+					
+					
+					if(abastecimento.x == posicaoX && abastecimento.y == posicaoY) { //chegou ao destino
 						capacidade_agua_presente = capacidade_max_agua;
 						System.out.println("Depósito de água atestado!!!");
 						//fazer um contador de recursos gastos.....
