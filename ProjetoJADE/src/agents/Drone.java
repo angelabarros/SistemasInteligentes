@@ -75,18 +75,6 @@ protected class Receiver2 extends CyclicBehaviour {
 				if(msg.getPerformative() == ACLMessage.CFP) { //verificar performative
 					
 					
-					try {
-						Message_PostosAbastecimento content =(Message_PostosAbastecimento) msg.getContentObject();
-						System.out.println(content.getSitios().toString());
-						System.out.println("RECEBEU OS PONTOS");
-						message_sitios = content;
-						
-						
-					} catch (UnreadableException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
 				}
 				else if(msg.getPerformative() == ACLMessage.CONFIRM) { //este é o agente + proximo e tem que ir apagar o fogo...
 					System.out.println("MENSAGEM RECEBIDA: " + msg.getContent());

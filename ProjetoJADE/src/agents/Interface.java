@@ -15,9 +15,6 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
 public class Interface extends Agent {
-	
-	protected ArrayList<Point> sitios = new ArrayList<>();
-	protected Message_PostosAbastecimento mySitios = new Message_PostosAbastecimento();
 
 	protected void setup(){
 		
@@ -38,7 +35,6 @@ public class Interface extends Agent {
 			e.printStackTrace();
 		}
 		
-		this.addBehaviour(new InformarPostosAbastecimento());
 	}
 	
 	protected void takeDown() {
@@ -54,42 +50,5 @@ public class Interface extends Agent {
 		
 	}
 	
-	
-	
-	private class InformarPostosAbastecimento extends OneShotBehaviour{
-		
-		@Override
-		public void action() {
-			// TODO Auto-generated method stub
-			 //sitios de abastecimento de combustivel
-			Random rand = new Random();
-			for(int i=0; i<2; i++) {
-				Point p = new Point(rand.nextInt(100), rand.nextInt(100));
-				System.out.println(p.x+"     .     "+p.y);
-				sitios.add(p);
-				mySitios.addPosto(p);
-			}
-			
-			System.out.println("SIZE: " + sitios.size());
-			ACLMessage mensagem = new ACLMessage(ACLMessage.CFP);
-			try {
-				mensagem.setContentObject(mySitios);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			AID receiver_drone = new AID();
-			receiver_drone.setLocalName("Drone");
-			AID receiver_camiao = new AID();
-			receiver_camiao.setLocalName("Camiao");
-			
-			//set receivers
-			mensagem.addReceiver(receiver_camiao);
-			mensagem.addReceiver(receiver_drone);
-			myAgent.send(mensagem);
-			
-		} 
-		
-	}
+
 }

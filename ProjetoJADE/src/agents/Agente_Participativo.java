@@ -31,16 +31,24 @@ public class Agente_Participativo extends Agent {
 	protected boolean esta_a_andar;
 	protected String agente_nome;
 	protected AID aid_agente;
-	protected Message_PostosAbastecimento sitiosAbastecimento;
-	protected ArrayList<Point> sitios = new ArrayList<>();
+	protected ArrayList<Point> sitios_gasolina = new ArrayList<>();
+	protected ArrayList<Point> sitios_water = new ArrayList<>();
 	
 	
-	public Message_PostosAbastecimento getSitiosAbastecimento() {
-		return sitiosAbastecimento;
+	public ArrayList<Point> getSitios_gasolina() {
+		return sitios_gasolina;
 	}
 
-	public void setSitiosAbastecimento(Message_PostosAbastecimento sitiosAbastecimento) {
-		this.sitiosAbastecimento = sitiosAbastecimento;
+	public void setSitios_gasolina(ArrayList<Point> sitios_gasolina) {
+		this.sitios_gasolina = sitios_gasolina;
+	}
+
+	public ArrayList<Point> getSitios_water() {
+		return sitios_water;
+	}
+
+	public void setSitios_water(ArrayList<Point> sitios_water) {
+		this.sitios_water = sitios_water;
 	}
 
 	Point p = new Point(50, 50);
@@ -84,6 +92,19 @@ public class Agente_Participativo extends Agent {
 
 	//meter os agentes a arranjarem a posição ideal
 	protected void setup(){
+		
+		//10 pontos de água
+		sitios_water.add(new Point(5,10));
+		sitios_water.add(new Point(20,20));
+		sitios_water.add(new Point(80,80));
+		sitios_water.add(new Point(74,28));
+		sitios_water.add(new Point(45,10));
+		sitios_water.add(new Point(78,50));
+		sitios_water.add(new Point(90,95));
+		sitios_water.add(new Point(33, 99));
+		sitios_water.add(new Point(60,73));
+		sitios_water.add(new Point(20, 84));
+		
 		
 		/*
 		 * System.out.println("Iniciar agente participativo"); super.setup();
@@ -147,15 +168,13 @@ public class Agente_Participativo extends Agent {
 					//calcular distancia dos postos de combustivel
 					
 					//deslocar para o posto mais próximo
-					Interface i = new Interface();
-					sitios = i.sitios;
 					
-					System.out.println("ANGELA....AQUI....");
-					System.out.println(sitios.toString());
+					Point abastecimento = new Point(0,0);
 					
+					abastecimento = getAbastecimentoMaisProximo(posicaoX, posicaoY, sitios_gasolina);
 					
-					deslocar(sitios_combustivel.x, sitios_combustivel.y);
-					if(sitios_combustivel.x == posicaoX && sitios_combustivel.y == posicaoY) { //chegou ao destino
+					deslocar(abastecimento.x, abastecimento.y);
+					if(abastecimento.x == posicaoX && abastecimento.y == posicaoY) { //chegou ao destino
 						capacidade_combustivel_presente = capacidade_max_combustivel;
 						System.out.println("Depósito de gasolina atestado!!! " + this.ag.getLocalName());
 						//fazer um contador de recursos gastos.....
@@ -264,6 +283,29 @@ public class Agente_Participativo extends Agent {
 		
 	}
 	
+	
+	protected Point getAbastecimentoMaisProximo(float x_inicial, float y_inicial, ArrayList<Point> pontos) {
+		
+		int x=0;
+		int y =0;
+		float distance = 100000;
+		float distance_aux = 0;
+		Point selected = new Point(0, 0);
+		System.out.println("A calcular coisas");
+		for (Point point : pontos) {
+			x = point.x;
+			y = point.y;
+			distance_aux = (float) Math.sqrt(((Math.pow((x - x_inicial), 2)) + (Math.pow((y - y_inicial), 2))));
+			if(distance_aux < distance) {
+				distance = distance_aux;
+				selected.x = x;
+				selected.y = y;
+			}
+			
+		}
+		return selected;
+	
+	}
 	
 	
 	protected float calculaDistancia(float x_inicial, float x_dest, float y_inicial, float y_dest) {
