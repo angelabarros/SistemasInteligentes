@@ -19,7 +19,7 @@ public class Incendiario extends Agent {
 		// TODO Auto-generated method stub
 		super.setup();
 		
-		this.addBehaviour(new Request(this, 20000));
+		this.addBehaviour(new Request(this, 5000));
 	
 		
 	}

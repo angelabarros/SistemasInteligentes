@@ -83,7 +83,7 @@ protected class Receiver2 extends CyclicBehaviour {
 					
 					int aux_x = (int) Float.parseFloat(xFogoAtivo);
 					int aux_y = (int) Float.parseFloat(yFogoAtivo);
-					deslocar(aux_x,aux_y);
+					deslocar(aux_x,aux_y, "Camiao");
 			 		
 					//apagar o fogo
 					if(Float.parseFloat(xFogoAtivo) == posicaoX && Float.parseFloat(yFogoAtivo) == posicaoY) { //garantir que o agente chegou ao incendio
@@ -101,7 +101,7 @@ protected class Receiver2 extends CyclicBehaviour {
 					receiver.setLocalName("Quartel");
 					
 					ACLMessage mensagem_sucesso = new ACLMessage(ACLMessage.CONFIRM);
-					mensagem_sucesso.setContent("sucesso" + "," + agua_gasta + "," + valor_a_gastar);
+					mensagem_sucesso.setContent("sucesso" + "," + agua_gasta + "," + valor_a_gastar + "," + "Camiao");
 					mensagem_sucesso.addReceiver(receiver);
 					myAgent.send(mensagem_sucesso);
 				}
