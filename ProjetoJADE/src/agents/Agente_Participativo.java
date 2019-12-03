@@ -31,7 +31,18 @@ public class Agente_Participativo extends Agent {
 	protected boolean esta_a_andar;
 	protected String agente_nome;
 	protected AID aid_agente;
+	protected Message_PostosAbastecimento sitiosAbastecimento;
+	protected ArrayList<Point> sitios = new ArrayList<>();
 	
+	
+	public Message_PostosAbastecimento getSitiosAbastecimento() {
+		return sitiosAbastecimento;
+	}
+
+	public void setSitiosAbastecimento(Message_PostosAbastecimento sitiosAbastecimento) {
+		this.sitiosAbastecimento = sitiosAbastecimento;
+	}
+
 	Point p = new Point(50, 50);
 	protected Point sitios_agua = p;
 	
@@ -136,6 +147,13 @@ public class Agente_Participativo extends Agent {
 					//calcular distancia dos postos de combustivel
 					
 					//deslocar para o posto mais próximo
+					Interface i = new Interface();
+					sitios = i.sitios;
+					
+					System.out.println("ANGELA....AQUI....");
+					System.out.println(sitios.toString());
+					
+					
 					deslocar(sitios_combustivel.x, sitios_combustivel.y);
 					if(sitios_combustivel.x == posicaoX && sitios_combustivel.y == posicaoY) { //chegou ao destino
 						capacidade_combustivel_presente = capacidade_max_combustivel;

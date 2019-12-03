@@ -61,7 +61,7 @@ protected class Receiver2 extends CyclicBehaviour {
 				
 				if(msg.getPerformative() == ACLMessage.CFP) { //verificar performative
 					
-					
+					System.out.println("Angela aqui");
 				}
 				else if(msg.getPerformative() == ACLMessage.CONFIRM) { //este é o agente + proximo e tem que ir apagar o fogo...
 					System.out.println("(camiao) MENSAGEM RECEBIDA: " + msg.getContent());
@@ -75,7 +75,7 @@ protected class Receiver2 extends CyclicBehaviour {
 					System.out.println("o valor a gastar é ------------------------------ " + valor_a_gastar);
 					
 					if((capacidade_combustivel_presente - valor_a_gastar) < threshold_combustivel) {
-						//copiar código
+						//copiar código [AQUIIIIIIIIIIIIII]
 					}
 					
 					int aux_x = (int) Float.parseFloat(xFogoAtivo);

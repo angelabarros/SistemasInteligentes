@@ -1,5 +1,7 @@
 package agents;
 
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Random;
 
 import jade.core.AID;
@@ -9,11 +11,22 @@ import jade.domain.FIPAException;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
+import jade.lang.acl.UnreadableException;
 
 //meter a info numa classe auxiliar, importar a classe e começar a utilizar as funçoes.
 
 public class Drone extends Agente_Participativo {
 	
+	private Message_PostosAbastecimento message_sitios = new Message_PostosAbastecimento();
+
+	public Message_PostosAbastecimento getMessage_sitios() {
+		return message_sitios;
+	}
+
+	public void setMessage_sitios(Message_PostosAbastecimento message_sitios) {
+		this.message_sitios = message_sitios;
+	}
+
 	protected void setup(){
 		
 		System.out.println("Iniciar agente drone!" + this.getLocalName());
@@ -61,6 +74,18 @@ protected class Receiver2 extends CyclicBehaviour {
 				
 				if(msg.getPerformative() == ACLMessage.CFP) { //verificar performative
 					
+					
+					try {
+						Message_PostosAbastecimento content =(Message_PostosAbastecimento) msg.getContentObject();
+						System.out.println(content.getSitios().toString());
+						System.out.println("RECEBEU OS PONTOS");
+						message_sitios = content;
+						
+						
+					} catch (UnreadableException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					
 				}
 				else if(msg.getPerformative() == ACLMessage.CONFIRM) { //este é o agente + proximo e tem que ir apagar o fogo...
