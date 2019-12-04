@@ -144,8 +144,6 @@ public class Quartel extends Agent {
 					
 					//meter a contar um timer para o fogo ativo
 					time = System.currentTimeMillis();
-					System.out.println(nome_agente + "aqui");
-					System.out.println(agenteMaisProximo_nome + "aqui2");
 					
 					//chamar agentes participativos - camiao
 					DFAgentDescription template_camiao = new DFAgentDescription();
@@ -249,28 +247,15 @@ public class Quartel extends Agent {
 				long time_final = 0;
 				fogos_apagados++;
 				time_final = System.currentTimeMillis();
-				
-				
+				long result = time_final - time;
+				System.out.println("TEMPO DURAÇÃO: " + result);
+				tempos.add((float)result);
 				String[] mensagem = msg.getContent().split(",");
 				String agua_gasta = mensagem[1].toString();
 				String combustivel_gasto = mensagem[2].toString();
-				String tipo_agente = mensagem[3].toString();
 				
 				total_agua_gasta += Integer.parseInt(agua_gasta);
 				total_combustivel_gasto += Float.parseFloat(combustivel_gasto);
-				double res;
-				res = Math.random()*5000;
-				if(tipo_agente.equalsIgnoreCase("Drone")) {
-					res = res/4;
-				}
-				if(tipo_agente.equalsIgnoreCase("Aeronave")) {
-					res = res/2;
-				}
-				
-				
-				long result = time_final - time;
-				System.out.println("TEMPO DURAÇÃO: " + res);
-				tempos.add((float)res);
 				
 				
 				
