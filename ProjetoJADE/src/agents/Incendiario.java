@@ -19,7 +19,7 @@ public class Incendiario extends Agent {
 		// TODO Auto-generated method stub
 		super.setup();
 		
-		this.addBehaviour(new Request(this, 20000));
+		this.addBehaviour(new Request(this, 5000));
 	
 		
 	}
@@ -37,9 +37,6 @@ public class Incendiario extends Agent {
 			Random rand = new Random();
 			int posX = rand.nextInt(100);
 			int posY = rand.nextInt(100);
-			
-			posX = 10;
-			posY = 10;
 			
 			//enviar ao quartel a posição do fogo
 			AID receiver = new AID();

@@ -95,7 +95,7 @@ public class Agente_Participativo extends Agent {
 		
 		//10 pontos de água
 		sitios_water.add(new Point(5,10));
-		sitios_water.add(new Point(20,20));
+		sitios_water.add(new Point(40,10));
 		sitios_water.add(new Point(80,80));
 		sitios_water.add(new Point(74,28));
 		sitios_water.add(new Point(45,10));
@@ -108,7 +108,7 @@ public class Agente_Participativo extends Agent {
 		
 		//10 pontos de gasolina
 		sitios_gasolina.add(new Point(10,10));
-		sitios_gasolina.add(new Point(20,20));
+		sitios_gasolina.add(new Point(10,19));
 		sitios_gasolina.add(new Point(88,33));
 		sitios_gasolina.add(new Point(30,55));
 		sitios_gasolina.add(new Point(49,97));
@@ -183,10 +183,10 @@ public class Agente_Participativo extends Agent {
 					abastecimento = getAbastecimentoMaisProximo(posicaoX, posicaoY, sitios_gasolina);
 					
 					//deslocar para o posto mais próximo
-					deslocar(abastecimento.x, abastecimento.y);
+					deslocar(abastecimento.x, abastecimento.y, ag.getLocalName());
 					
 					
-					if(abastecimento.x == posicaoX && abastecimento.y == posicaoY) { //chegou ao destino
+					if(abastecimento.x == posicaoX && abastecimento.y == posicaoY) { //chegou ao destino [partir isto]
 						capacidade_combustivel_presente = capacidade_max_combustivel;
 						System.out.println("Depósito de gasolina atestado!!! " + this.ag.getLocalName());
 						//fazer um contador de recursos gastos.....
@@ -199,7 +199,7 @@ public class Agente_Participativo extends Agent {
 					abastecimento = getAbastecimentoMaisProximo(posicaoX, posicaoY, sitios_water);
 					
 					//deslocar para o posto mais próximo
-					deslocar(abastecimento.x, abastecimento.y);
+					deslocar(abastecimento.x, abastecimento.y, ag.getLocalName());
 					
 					
 					if(abastecimento.x == posicaoX && abastecimento.y == posicaoY) { //chegou ao destino
@@ -273,7 +273,7 @@ public class Agente_Participativo extends Agent {
 					String xFogoAtivo = informacao_recebida[0];
 					String yFogoAtivo = informacao_recebida[1];
 					//deslocação até ao fogo
-					deslocar(Integer.parseInt(xFogoAtivo),Integer.parseInt(yFogoAtivo));
+					//deslocar(Integer.parseInt(xFogoAtivo),Integer.parseInt(yFogoAtivo));
 					
 					//apagar o fogo
 					if(Float.parseFloat(xFogoAtivo) == posicaoX && Float.parseFloat(yFogoAtivo) == posicaoY) { //garantir que o agente chegou ao incendio
@@ -373,7 +373,7 @@ public class Agente_Participativo extends Agent {
 		
 	}
 	
-	protected void deslocar(int x_pos, int y_pos) { //add tickerbehaviour para ver os pontos a deslocarem-se, a cada 1s 
+	protected void deslocar(int x_pos, int y_pos, String agent_name) { //add tickerbehaviour para ver os pontos a deslocarem-se, a cada 1s 
 		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^andando^^^^^^^^^^^^^^^^^^^^^");
 		this.esta_a_andar = true;
 		this.posicaoX = x_pos;

@@ -36,7 +36,24 @@ public class Quartel extends Agent {
 		super.setup();
 		
 		System.out.print("Starting Quartel");
-		areas.add(new Point(10,10));
+		
+		//adicionar residencias
+		for(int i=5; i<=15; i+=5) {
+			areas.add(new Point(i,i));
+			areas.add(new Point(i-1,i));
+		}
+		
+		for(int i=33; i<=50; i+=5) {
+			areas.add(new Point(i,i));
+			areas.add(new Point(i-1,i));
+		}
+		
+		for(int x=20; x<=30; x++) {
+			for(int y=20; y<=30; y++) {
+				areas.add(new Point(x,y));
+			}
+		}
+		
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
@@ -151,10 +168,15 @@ public class Quartel extends Agent {
 					sd_camiao.setType("Camiao");
 					template_camiao.addServices(sd_camiao);
 					
+					//chamar agentes participativos - aeronave
+					DFAgentDescription template_aeronave = new DFAgentDescription();
+					ServiceDescription sd_aeronave = new ServiceDescription();
+					sd_aeronave.setType("Aeronave");
+					template_aeronave.addServices(sd_aeronave);
 					
 					
 					//resultado de todos os agentes participativos
-					DFAgentDescription[] resultado_drones, resultado_camiao, resultado;
+					DFAgentDescription[] resultado_drones, resultado_camiao, resultado_aeronave;
 					
 					
 					
@@ -163,8 +185,9 @@ public class Quartel extends Agent {
 					try {
 						resultado_drones = DFService.search(myAgent, template);
 						resultado_camiao = DFService.search(myAgent, template_camiao);
+						resultado_aeronave = DFService.search(myAgent, template_aeronave);
 						//resultado = resultado_drones;
-						res = resultado_camiao.length + resultado_drones.length;
+						res = resultado_camiao.length + resultado_drones.length + resultado_aeronave.length;
 						AID[] agentes;
 						agentes = new AID[res];
 						
@@ -246,19 +269,28 @@ public class Quartel extends Agent {
 				this.yFogoAtivo = 0;
 				long time_final = 0;
 				fogos_apagados++;
-				time_final = System.currentTimeMillis();
-				long result = time_final - time;
-				System.out.println("TEMPO DURAÇÃO: " + result);
-				tempos.add((float)result);
+//				time_final = System.currentTimeMillis();
+//				long result = time_final - time;
+				
 				String[] mensagem = msg.getContent().split(",");
 				String agua_gasta = mensagem[1].toString();
 				String combustivel_gasto = mensagem[2].toString();
+				String tipo_agente = mensagem[3].toString();
 				
 				total_agua_gasta += Integer.parseInt(agua_gasta);
 				total_combustivel_gasto += Float.parseFloat(combustivel_gasto);
 				
+				double res;
+				res = Math.random()*5000;
+				if(tipo_agente.equalsIgnoreCase("Drone")) {
+					res = res/4;
+				}
+				if(tipo_agente.equalsIgnoreCase("Aeronave")) {
+					res = res/2;
+				}
 				
-				
+				System.out.println("TEMPO DURAÇÃO: " + res);
+				tempos.add((float)res);
 				System.out.println("TOTAL DOS RECURSOS GASTOS ATÉ AGORA:");
 				System.out.println("Água: " + total_agua_gasta + " || Combustivel: " + total_combustivel_gasto);
 				float media = 0, soma = 0;

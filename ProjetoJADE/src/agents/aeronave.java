@@ -30,7 +30,7 @@ public class aeronave extends Agente_Participativo {
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
-		sd.setType("agente");
+		sd.setType("Aeronave");
 		sd.setName(getLocalName());
 		dfd.addServices(sd);
 		
