@@ -251,7 +251,6 @@ public class Agente_Participativo extends Agent {
 				ex.printStackTrace();
 			}
 			msg.addReceiver(receiver);
-			msg.addReceiver(receiver_interface);
 			myAgent.send(msg);
 
 		}
