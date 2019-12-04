@@ -14,6 +14,7 @@ import jade.lang.acl.UnreadableException;
 import jade.util.leap.ArrayList;
 import jade.util.leap.HashMap;
 
+import java.awt.Point;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,13 +29,14 @@ public class Quartel extends Agent {
 	int total_agua_gasta = 0;
 	ArrayList tempos = new ArrayList();
 	int fogos_apagados = 0;
-	
+	int fogos_zonas_importantes = 0;
+	protected java.util.ArrayList<Point> areas = new java.util.ArrayList<>();
 	
 	protected void setup() {
 		super.setup();
 		
 		System.out.print("Starting Quartel");
-		
+		areas.add(new Point(10,10));
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
 		ServiceDescription sd = new ServiceDescription();
@@ -126,6 +128,13 @@ public class Quartel extends Agent {
 					yFogoAtivo = Integer.parseInt(coordenadas[1]);
 					
 					System.out.println("Há um fogo ativo!!! x: " + xFogoAtivo + "y: " + yFogoAtivo);
+					
+					for (Point point : areas) {
+						if(xFogoAtivo == point.x && yFogoAtivo == point.y) {
+							fogos_zonas_importantes++;
+							System.out.println("O fogo ativo encontra-se numa zona residencial");
+						}
+					}
 					
 					//chamar agentes participativos - drones
 					DFAgentDescription template = new DFAgentDescription(); //duplicar e depois fazer merge
@@ -273,7 +282,7 @@ public class Quartel extends Agent {
 				}
 				media = soma / tempos.size();
 				System.out.println("Média tempos: " + media);
-				System.out.println("TOTAL FOGOS APAGADOS: " + fogos_apagados);
+				System.out.println("TOTAL FOGOS APAGADOS: " + fogos_apagados + "  ~ dos quais em zonas residenciais: " + fogos_zonas_importantes);
 			}
 				
 			}else {
