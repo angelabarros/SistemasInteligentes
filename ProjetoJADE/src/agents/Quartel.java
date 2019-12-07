@@ -150,6 +150,7 @@ public class Quartel extends Agent {
 						if(xFogoAtivo == point.x && yFogoAtivo == point.y) {
 							fogos_zonas_importantes++;
 							System.out.println("O fogo ativo encontra-se numa zona residencial");
+							System.out.println("FOGO COM GRAVIDADE!");
 						}
 					}
 					

@@ -314,7 +314,8 @@ public class Agente_Participativo extends Agent {
 		for (Point point : pontos) {
 			x = point.x;
 			y = point.y;
-			distance_aux = (float) Math.sqrt(((Math.pow((x - x_inicial), 2)) + (Math.pow((y - y_inicial), 2))));
+			distance_aux = calculaDistancia(x_inicial, x, y_inicial, y);
+					
 			if(distance_aux < distance) {
 				distance = distance_aux;
 				selected.x = x;
@@ -379,7 +380,9 @@ public class Agente_Participativo extends Agent {
 		this.posicaoX = x_pos;
 		this.posicaoY = y_pos;
 		
-		
+		if(agent_name.equalsIgnoreCase("Camiao")) {
+			
+		}
 		
 		
 		this.esta_a_andar = !esta_a_andar;
