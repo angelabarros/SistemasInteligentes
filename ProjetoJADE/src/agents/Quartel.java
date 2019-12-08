@@ -128,14 +128,6 @@ public class Quartel extends Agent {
 		public void action() {
 			ACLMessage msg = receive();
 			if(msg != null) {
-//				try {
-//					Custom_Message content =(Custom_Message) msg.getContentObject();
-//					System.out.println(content.getAid_agente());
-//					
-//				} catch (UnreadableException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
 				//mensagem vinda do incendiário
 				if(msg.getPerformative() == ACLMessage.INFORM) {
 					
@@ -251,7 +243,6 @@ public class Quartel extends Agent {
 					e1.printStackTrace();
 				}
 				
-				//preencher hashmap com a key do fogo -- depois!!!!!
 				Agente_Participativo agente_novo = new Agente_Participativo();
 				agente_novo.setPosicaoX((int)xAgente);
 				agente_novo.setAgente_nome(local_name);
@@ -261,7 +252,6 @@ public class Quartel extends Agent {
 				agente_novo.setPosicaoY((int)yAgente);
 				agentes_mapa.put(local_name, agente_novo);
 				
-				//agentes_mapa.toString();
 
 				
 			}else if(msg.getPerformative() == ACLMessage.CONFIRM) {
@@ -328,9 +318,6 @@ public class Quartel extends Agent {
 			agenteMaisProximo_nome.toString();
 			System.out.println("agente + próximo: " + agenteMaisProximo_nome);
 			
-			//dividir isto em listas de agentes_participativos e ver o melhor de cada tipo
-			//depois de ter o melhor, ter em conta a velocidade (tempo para chegar ao fogo)
-			//depois ter em conta os recursos
 			}
 	}
 }

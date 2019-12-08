@@ -28,17 +28,29 @@ public class MainContainer {
 		//registar agentes participativos
 		a.startAgentInPlatform("Incendiario", "agents.Incendiario");
 		a.startAgentInPlatform("Quartel", "agents.Quartel");
-		a.startAgentInPlatform("Drone00", "agents.Drone");
-//		a.startAgentInPlatform("Drone01", "agents.Drone");
-//		a.startAgentInPlatform("Drone02", "agents.Drone");
-//		a.startAgentInPlatform("Drone03", "agents.Drone");
-//		a.startAgentInPlatform("Drone04", "agents.Drone");
-//		a.startAgentInPlatform("Drone05", "agents.Drone");
-		a.startAgentInPlatform("Camiao0", "agents.camiao");
-//		a.startAgentInPlatform("Camiao1", "agents.camiao");
-//		a.startAgentInPlatform("Camiao2", "agents.camiao");
-//		a.startAgentInPlatform("Camiao3", "agents.camiao");
-		a.startAgentInPlatform("Aeronave00", "agents.aeronave");
+		//a.startAgentInPlatform("Drone0000", "agents.Drone");
+		a.startAgentInPlatform("Drone0001", "agents.Drone");
+		a.startAgentInPlatform("Drone0002", "agents.Drone");
+		a.startAgentInPlatform("Drone0003", "agents.Drone");
+		a.startAgentInPlatform("Drone0004", "agents.Drone");
+		a.startAgentInPlatform("Drone0005", "agents.Drone");
+		a.startAgentInPlatform("Drone0006", "agents.Drone");
+		a.startAgentInPlatform("Drone0007", "agents.Drone");
+		a.startAgentInPlatform("Drone0008", "agents.Drone");
+		a.startAgentInPlatform("Drone0009", "agents.Drone");
+		a.startAgentInPlatform("Drone0010", "agents.Drone");
+		
+		
+//		a.startAgentInPlatform("Camiao000", "agents.camiao");
+		a.startAgentInPlatform("Camiao001", "agents.camiao");
+		a.startAgentInPlatform("Camiao002", "agents.camiao");
+		a.startAgentInPlatform("Camiao003", "agents.camiao");
+		a.startAgentInPlatform("Camiao004", "agents.camiao");
+		a.startAgentInPlatform("Camiao005", "agents.camiao");
+		
+		
+		a.startAgentInPlatform("Aeronave1", "agents.aeronave");
+		a.startAgentInPlatform("Aeronave2", "agents.aeronave");
 		a.startAgentInPlatform("Interface", "agents.Interface");
 		
 		

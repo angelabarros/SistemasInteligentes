@@ -50,13 +50,6 @@ public class Agente_Participativo extends Agent {
 	public void setSitios_water(ArrayList<Point> sitios_water) {
 		this.sitios_water = sitios_water;
 	}
-
-	Point p = new Point(50, 50);
-	protected Point sitios_agua = p;
-	
-	Point q = new Point(60, 60);
-	protected Point sitios_combustivel = q;
-	
 	
 	public int getPosicaoX() {
 		return posicaoX;
@@ -186,10 +179,10 @@ public class Agente_Participativo extends Agent {
 					deslocar(abastecimento.x, abastecimento.y, ag.getLocalName());
 					
 					
-					if(abastecimento.x == posicaoX && abastecimento.y == posicaoY) { //chegou ao destino [partir isto]
+					if(abastecimento.x == posicaoX && abastecimento.y == posicaoY) { //chegou ao destino 
 						capacidade_combustivel_presente = capacidade_max_combustivel;
 						System.out.println("Depósito de gasolina atestado!!! " + this.ag.getLocalName());
-						//fazer um contador de recursos gastos.....
+						
 					}
 					
 				}
@@ -205,7 +198,7 @@ public class Agente_Participativo extends Agent {
 					if(abastecimento.x == posicaoX && abastecimento.y == posicaoY) { //chegou ao destino
 						capacidade_agua_presente = capacidade_max_agua;
 						System.out.println("Depósito de água atestado!!!");
-						//fazer um contador de recursos gastos.....
+						
 					}
 				}
 				
@@ -218,7 +211,7 @@ public class Agente_Participativo extends Agent {
 		
 	}
 	
-	protected class Request extends TickerBehaviour{ //apagar isto e fazer um oneshot a informar sempre que me mexer
+	protected class Request extends TickerBehaviour{ 
 		private Agent ag;
 		public Request(Agent a, long period) {
 			super(a,period);
@@ -268,30 +261,30 @@ public class Agente_Participativo extends Agent {
 					
 				}
 				else if(msg.getPerformative() == ACLMessage.CONFIRM) { //este é o agente + proximo e tem que ir apagar o fogo...
-					System.out.println("TAS NO SITIO ERRADO");
-					String[] informacao_recebida = msg.getContent().split(",");
-					String xFogoAtivo = informacao_recebida[0];
-					String yFogoAtivo = informacao_recebida[1];
-					//deslocação até ao fogo
-					//deslocar(Integer.parseInt(xFogoAtivo),Integer.parseInt(yFogoAtivo));
-					
-					//apagar o fogo
-					if(Float.parseFloat(xFogoAtivo) == posicaoX && Float.parseFloat(yFogoAtivo) == posicaoY) { //garantir que o agente chegou ao incendio
-						//atualizar os recursos
-						capacidade_agua_presente--;
-						float valor_gasto = calculaRecursos(Float.parseFloat(xFogoAtivo), Float.parseFloat(yFogoAtivo));
-						capacidade_combustivel_presente -= valor_gasto;
-						
-					}
-					
-					//enviar informação ao quartel de que o fogo está apagado
-					AID receiver = new AID();
-					receiver.setLocalName("Quartel");
-					
-					ACLMessage mensagem_sucesso = new ACLMessage(ACLMessage.CONFIRM);
-					mensagem_sucesso.setContent("sucesso");
-					mensagem_sucesso.addReceiver(receiver);
-					myAgent.send(mensagem_sucesso);
+//					System.out.println("TAS NO SITIO ERRADO");
+//					String[] informacao_recebida = msg.getContent().split(",");
+//					String xFogoAtivo = informacao_recebida[0];
+//					String yFogoAtivo = informacao_recebida[1];
+//					//deslocação até ao fogo
+//					//deslocar(Integer.parseInt(xFogoAtivo),Integer.parseInt(yFogoAtivo));
+//					
+//					//apagar o fogo
+//					if(Float.parseFloat(xFogoAtivo) == posicaoX && Float.parseFloat(yFogoAtivo) == posicaoY) { //garantir que o agente chegou ao incendio
+//						//atualizar os recursos
+//						capacidade_agua_presente--;
+//						float valor_gasto = calculaRecursos(Float.parseFloat(xFogoAtivo), Float.parseFloat(yFogoAtivo));
+//						capacidade_combustivel_presente -= valor_gasto;
+//						
+//					}
+//					
+//					//enviar informação ao quartel de que o fogo está apagado
+//					AID receiver = new AID();
+//					receiver.setLocalName("Quartel");
+//					
+//					ACLMessage mensagem_sucesso = new ACLMessage(ACLMessage.CONFIRM);
+//					mensagem_sucesso.setContent("sucesso");
+//					mensagem_sucesso.addReceiver(receiver);
+//					myAgent.send(mensagem_sucesso);
 				}
 				
 			}
@@ -379,9 +372,30 @@ public class Agente_Participativo extends Agent {
 		this.esta_a_andar = true;
 		this.posicaoX = x_pos;
 		this.posicaoY = y_pos;
+		int temp = 50;
+		
 		
 		if(agent_name.equalsIgnoreCase("Camiao")) {
-			
+			try {
+				Thread.sleep((long)temp * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(agent_name.equalsIgnoreCase("Drone")) {
+			try {
+				Thread.sleep((long)(temp/4) * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}else if(agent_name.equalsIgnoreCase("Aeronave")) {
+			try {
+				Thread.sleep((long)(temp/2)   * 1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		
@@ -389,10 +403,6 @@ public class Agente_Participativo extends Agent {
 		
 	}
 	
-	//comunicação entre agentes para saber qual a melhor posição no mapa? (cooperação) [posterior]
-
-	
-
 	
 	
 		

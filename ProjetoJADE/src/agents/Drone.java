@@ -28,12 +28,12 @@ public class Drone extends Agente_Participativo {
 		this.posicaoX = rand.nextInt(100);
 		this.posicaoY = rand.nextInt(100);
 		this.velocidade = 1;
-		this.capacidade_max_agua = 10;
-		this.capacidade_max_combustivel = 10;
-		this.capacidade_agua_presente = 10;
-		this.capacidade_combustivel_presente = 10;
-		this.threshold_combustivel = 5;
-		this.threshold_agua = 2;
+		this.capacidade_max_agua = 2;
+		this.capacidade_max_combustivel = 5;
+		this.capacidade_agua_presente = 2;
+		this.capacidade_combustivel_presente = 5;
+		this.threshold_combustivel = 3;
+		this.threshold_agua = 1;
 		
 		DFAgentDescription dfd = new DFAgentDescription();
 		dfd.setName(getAID());
